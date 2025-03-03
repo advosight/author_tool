@@ -7,3 +7,4 @@ pillow >= 11.1.0
 streamlit-quill >= 0.0.3
 pyttsx3 >= 2.98
 streamlit_navigation_bar >= 3.3.0
+pygame >= 2.6.0

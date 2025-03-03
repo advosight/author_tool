@@ -1,5 +1,4 @@
 import streamlit as st
-from code_editor import code_editor
 from book_maker import Book, Chapter
 from llm import getLLM
 from streamlit_quill import st_quill
