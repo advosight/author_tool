@@ -2,9 +2,11 @@ import streamlit as st
 import json
 import pygame
 from io import BytesIO
-from utils import Storage
+from utils import Storage, getLogger
 from .character import Character
 from llm import getLLM
+
+logger = getLogger('Chapter')
 
 class ChapterEval:
     def __init__(self, data: dict):
@@ -233,7 +235,7 @@ class Chapter:
             while pygame.mixer.music.get_busy():
                 pygame.time.Clock().tick(10)
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
         finally:
             pygame.mixer.quit()
 
@@ -303,7 +305,7 @@ class Chapter:
                 return None
             
             evalStr = evalStr[8:-3]
-            print(evalStr)
+            logger.info(evalStr)
             self.storage.saveChapterTechnicalEval(self.number, evalStr)
             self._technical_eval = ChapterEval(json.loads(evalStr))
         except:
@@ -342,7 +344,7 @@ class Chapter:
         # Append all previous chapters to the conversation
         for i in range(0, self.number):
             chapter = self.book.chapters[i]
-            conversation.append({ "role": "user", "content": f"The following is the chapter {i}:\n{chapter.content}"})
+            conversation.append({ "role": "user", "content": f"The following is a summary of the chapter {i}:\n{chapter.summary}"})
             conversation.append({ "role": "ai", "content": "I will take this into account" })
 
         conversation.append({ "role": "user", "content": f"The current chapter: {self.content}"})
@@ -360,13 +362,14 @@ class Chapter:
                 return None
             
             evalStr = evalStr[8:-3]
-            print(json.dumps(evalStr))
+            logger.info(json.dumps(evalStr))
             self.storage.saveChapterEntertainmentEval(self.number, evalStr)
 
-            print("Loading eval")
-            print(evalStr)
+            logger.info("Loading eval")
+            logger.info(evalStr)
             self._entertainment_eval = ChapterEval(json.loads(evalStr))
-        except:
+        except Exception as e:
+            logger.error(f"Entertainment Eval Failed {e}")
             return None
         return self._entertainment_eval
     
