@@ -208,7 +208,7 @@ You are a literature professor. For the character {self.name}, the following des
         if self._expertise is not None:
             return self._expertise
 
-        self._expertise = self.llm.prompt(f"Create a list of the expertise for the character {self.name}. Only include the list in the response: {self.chapter.content}")
+        self._expertise = self.llm.prompt(f"Create a list of the expertise for the character {self.name}. Only include the list in the response: {self.description}")
         return self._expertise
 
     @expertise.setter

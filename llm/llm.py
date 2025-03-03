@@ -10,6 +10,7 @@ logger = getLogger('LLM')
 
 class EmptyLLM:
     def __init__(self):
+        self.name = "Empty LLM"
         self.max_tokens = 0
 
     def prompt(self, prompt) -> str:
@@ -28,6 +29,11 @@ class LLM:
         self.tech_eval = EmptyLLM()
         self.ent_eval = EmptyLLM()
         self.voice = EmptyLLM()
+
+        storage = Storage(None)
+        settings = storage.getSettings()
+        if settings is not None:
+            self.loadConfigurations(settings)
 
     @property
     def max_tokens(self) -> int:
@@ -104,6 +110,7 @@ class LLM:
         Args:
             prompt (str): The prompt for the LLM
         """
+        print(f"Executing prompt on {self.api.name}")
         return self.api.prompt(prompt)
 
     def image(self, prompt: str) -> bytes:
@@ -113,7 +120,8 @@ class LLM:
         
         Returns: The bytes of the image
         """
-        return self.bedrock_api.image(prompt)
+        print(f"Executing image on {self.image_api.name}")
+        return self.image_api.image(prompt)
 
     def conversation(self, conversation: [dict], temperature: float = 0.7) -> str:
         """ Invokes the LLM with a conversation
@@ -129,6 +137,7 @@ class LLM:
                 { "role": "ai", "content": "System response"},
             ]
         """
+        print(f"Executing conversation on {self.api.name}")
         return self.api.conversation(conversation, temperature)
     
     def techEval(self, conversation: [dict], temperature: float = 0.9) -> str:
@@ -145,6 +154,7 @@ class LLM:
                 { "role": "ai", "content": "System response"},
             ]
         """
+        print(f"Executing techEval on {self.tech_eval.name}")
         return self.tech_eval.conversation(conversation, temperature)
 
     def entEval(self, conversation: [dict], temperature: float = 0.9) -> str:
@@ -161,6 +171,7 @@ class LLM:
                 { "role": "ai", "content": "System response"},
             ]
         """
+        print(f"Executing entEval on {self.ent_eval.name}")
         return self.ent_eval.conversation(conversation, temperature)
     
     def getSpeech(self, text: str) -> bytes:
@@ -170,6 +181,7 @@ class LLM:
 
         Returns: The bytes of the speech
         """
+        print(f"Executing getSpeech on {self.voice.name}")
         return self.voice.getSpeech(text)
 
 _llm_instance = LLM()

@@ -289,7 +289,8 @@ class Chapter:
 
         conversation.append({ "role": "user", "content": f"""
         You are an expert in the fields that the characters are experts in. 
-        Evaluate the technical details of the following chapter and identify all incongruencies and misstatements when it comes to the technical expertise of the characters in the chapter.
+        Evaluate the technical details of the following chapter and identify all incongruence and misstatements when it comes to the technical expertise of the characters in the chapter. Take into account
+        Who is communicating and who they are communicating to, to ensure things like simplification of concepts are taken into account.
         If a character states something that mitigates the concern, do not include the feedback.
         In the response, if something is generally aligned, then don't include it in the feedback. Only include the specific bullet pointed issues with the chapter while considering of the situation the characters find themselves in
         the current chapter. Return only negative feedback, and exclude positive feedback. The format of the result is JSON with the following structure: {{ "score": int, "comments": [str] }}

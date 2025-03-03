@@ -4,6 +4,7 @@ import json
 murf_url = "https://api.murf.ai/v1/speech/generate"
 class Murf:
     def __init__(self, config: dict):
+        self.name = "Murf"
         self.api_key = config.get('api_key', None)
         self.local = config.get('local', 'en-US')
         self.model_version = config.get('model_version', 'GEN2')

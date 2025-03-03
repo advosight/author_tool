@@ -2,6 +2,7 @@ from openai import OpenAI
 
 class OpenAiLLM:
     def __init__(self, config: dict):
+        self.name = "OpenAI"
         api_key = config.get('api_key', '')
         self.client = OpenAI(api_key=api_key)
         self.default_temp = config.get('default_temp', 0.7)

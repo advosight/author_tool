@@ -2,6 +2,7 @@ import streamlit as st
 from views.characters import listCharacters
 from views.content_edit import contentEditor, segmentEditor
 from book_maker import Chapter
+from llm import getLLM
 
 def viewChapter(chapter: Chapter):
 
@@ -54,6 +55,11 @@ def viewChapter(chapter: Chapter):
                 st.rerun()
             st.divider()
 
+    # Check if LLM is configured and if not show a warning
+    if getLLM().is_configured is False:
+        st.warning("LLM is not configured. Please configure the LLM in the settings page.")
+
+    # Display Chapter Evaluations
     col1, col2 = st.columns([1, 1])
 
     with col1:

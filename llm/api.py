@@ -3,6 +3,7 @@ from logging import getLogger
 
 class ApiLLM:
     def __init__(self, config):
+        self.name = "API"
         self.endpoint = config.get('url', None)
         self.model = config.get('model', None)
 

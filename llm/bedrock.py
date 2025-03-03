@@ -5,6 +5,7 @@ import base64
 
 class BedrockLLM:
     def __init__(self, settings: dict):
+        self.name = "Bedrock"
         self.model_id = settings['model']
         self.max_tokens = settings['max_tokens']
 
