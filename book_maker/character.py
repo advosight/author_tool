@@ -1,6 +1,8 @@
-from utils import Storage
+from utils import Storage, getLogger
 from llm import getLLM
 import base64
+
+logger = getLogger('Character', 'DEBUG')
 
 class Character:
     def __init__(self, book: any, chapter: any, name: str, storage: Storage):
@@ -204,11 +206,18 @@ You are a literature professor. For the character {self.name}, the following des
         if self._expertise is not None:
             return self._expertise
 
+        logger.info(f"Loading expertise from storage for {self.name}")
         self._expertise = self.storage.loadCharacterExpertise(self.name)
         if self._expertise is not None:
             return self._expertise
 
-        self._expertise = self.llm.prompt(f"Create a list of the expertise for the character {self.name}. Only include the list in the response: {self.description}")
+        logger.info(f"Generating expertise for {self.name}")
+        self._expertise = self.llm.prompt(f"Create a list of the professional expertise for the character {self.name}. Only include the list in the response: {self.description}")
+        
+        logger.info(f"Expertise for {self.name}: {self._expertise}")
+        if self._expertise is not None:
+            self.storage.saveCharacterExpertise(self.name, self._expertise)
+
         return self._expertise
 
     @expertise.setter
