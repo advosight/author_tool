@@ -59,7 +59,7 @@ def viewChapter(chapter: Chapter):
     with col1:
         if chapter.entertainment_eval is not None:
             help_text = ""
-            for feedback in chapter.technical_eval.comments:
+            for feedback in chapter.entertainment_eval.comments:
                 help_text += f"- {feedback}\n"
             st.select_slider("Entertainment", value=chapter.entertainment_eval.score, options=range(0, 100), help=help_text)
 
