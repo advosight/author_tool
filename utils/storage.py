@@ -584,3 +584,15 @@ class Storage:
         with open(f"{self.libraryRoot}/settings.json", "w") as f:
             f.write(json.dumps(settings, indent=4))
             f.close()
+
+    def moveChapterNumber(self, chapter: int, new_number: int):
+        """Moves the chapter to a new number
+        Args:
+            chapter (int): The chapter number
+            new_number (int): The new chapter number
+        """
+        chapter_root = f"{self.root}/chapters/{chapter}"
+        new_root = f"{self.root}/chapters/{new_number}"
+
+        # Move directory from chapter_root to new_root
+        shutil.move(chapter_root, new_root)

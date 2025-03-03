@@ -19,9 +19,14 @@ with st.sidebar:
     st.write(f"# {book.title}")
     
     # Let user pick which chapter
-    chapters = []
-    for chapter in book.chapters:
-        chapters.append(str(chapter))
+    def buildChapterList():
+        chapters = []
+        for chapter in book.chapters:
+            chapters.append(str(chapter))
+        
+        st.session_state.chapters = chapters
+
+    buildChapterList()
     
     if "selected_chapter" not in st.session_state:
         # No chapter selected, so get the last chapter of the book
@@ -30,14 +35,14 @@ with st.sidebar:
     def onChapterChange():
         st.session_state.chapter = book.getChapter(st.session_state.selected_chapter_name)
 
-    st.selectbox("Chapters", chapters, key="selected_chapter_name", index=st.session_state.selected_chapter, on_change=onChapterChange)
+    st.selectbox("Chapters", st.session_state.chapters, key="selected_chapter_name", index=st.session_state.selected_chapter, on_change=onChapterChange)
 
     # Add ability for user to add a new chapter
     if st.button("Add Chapter"):
-        chapter = book.addChapter()
-        chapters.append(str(chapter))
-        st.session_state.selected_chapter = len(chapters) - 1
-        st.session_state.selected_chapter_name = str(chapter)
+        chapter = book.addChapter(st.session_state.chapter.number)
+        buildChapterList()
+        st.session_state.selected_chapter = chapter.number - 1
+        st.rerun()
 
     onChapterChange()
 

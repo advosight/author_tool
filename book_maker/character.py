@@ -95,8 +95,8 @@ You are a literature professor. For the character {self.name}, the following des
         if self._visual_description is not None:
             return self._visual_description
         
-        self.visual_description = self.llm.prompt(f"Create a visual description of the character {self.name}. Keep the description to less than 500 characters and only include the visual description in the response: {description}")
-        self.storage.saveCharacterVisualDescription(self.name, visual_description)
+        self.visual_description = self.llm.prompt(f"Create a visual description of the character {self.name}. Keep the description to less than 500 characters and only include the visual description in the response: {self.chapter.content}")
+        self.storage.saveCharacterVisualDescription(self.name, self.visual_description)
 
         return self.visual_description
 
@@ -211,12 +211,15 @@ You are a literature professor. For the character {self.name}, the following des
         if self._expertise is not None:
             return self._expertise
 
-        logger.info(f"Generating expertise for {self.name}")
-        self._expertise = self.llm.prompt(f"Create a list of the professional expertise for the character {self.name}. Only include the list in the response: {self.description}")
-        
-        logger.info(f"Expertise for {self.name}: {self._expertise}")
-        if self._expertise is not None:
-            self.storage.saveCharacterExpertise(self.name, self._expertise)
+        try:
+            logger.info(f"Generating expertise for {self.name}")
+            self._expertise = self.llm.prompt(f"Create a list of the professional expertise for the character {self.name}. Only include the list in the response: {self.description}")
+            
+            logger.info(f"Expertise for {self.name}: {self._expertise}")
+            if self._expertise is not None:
+                self.storage.saveCharacterExpertise(self.name, self._expertise)
+        except:
+            return None
 
         return self._expertise
 

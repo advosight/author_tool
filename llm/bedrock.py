@@ -12,7 +12,6 @@ class BedrockLLM:
         # Instantiate Bedrock LLM Client
         config = Config(read_timeout=1000)
         self.client = boto3.client("bedrock-runtime", config=config)
-        self.image_client = boto3.client("bedrock-runtime", config=config)
 
     def prompt(self, prompt):
         # Construct the prompt to bedrock
@@ -66,9 +65,9 @@ class BedrockLLM:
         # Construct the prompt to bedrock
 
         # check if the image model id starts with stability
-        if self.image_model_id.startswith("stability"):
-            response = self.image_client.invoke_model(
-                modelId=self.image_model_id,
+        if self.model_id.startswith("stability"):
+            response = self.client.invoke_model(
+                modelId=self.model_id,
                 body= json.dumps({
                     "prompt": "The described person should be photo realistic. " + prompt,
                     "aspect_ratio": "1:1",
@@ -78,9 +77,9 @@ class BedrockLLM:
                 contentType="application/json"
             )
             
-        if self.image_model_id.startswith("amazon"):
-            response = self.image_client.invoke_model(
-                modelId=self.image_model_id,
+        if self.model_id.startswith("amazon"):
+            response = self.client.invoke_model(
+                modelId=self.model_id,
                 body= json.dumps({
                     "textToImageParams": {
                         "text": "Do not base this image on real people, but should be photo realistic. " + prompt

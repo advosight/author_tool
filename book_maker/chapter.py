@@ -295,15 +295,19 @@ class Chapter:
         In the response, if something is generally aligned, then don't include it in the feedback. Only include the specific bullet pointed issues with the chapter while considering of the situation the characters find themselves in
         the current chapter. Return only negative feedback, and exclude positive feedback. The format of the result is JSON with the following structure: {{ "score": int, "comments": [str] }}
         """})
-        evalStr = self.llm.techEval(conversation)
-        if evalStr is None:
-            self._technical_eval = None
+
+        try:
+            evalStr = self.llm.techEval(conversation)
+            if evalStr is None:
+                self._technical_eval = None
+                return None
+            
+            evalStr = evalStr[8:-3]
+            print(evalStr)
+            self.storage.saveChapterTechnicalEval(self.number, evalStr)
+            self._technical_eval = ChapterEval(json.loads(evalStr))
+        except:
             return None
-        
-        evalStr = evalStr[8:-3]
-        print(evalStr)
-        self.storage.saveChapterTechnicalEval(self.number, evalStr)
-        self._technical_eval = ChapterEval(json.loads(evalStr))
         
         return self._technical_eval
 
@@ -321,7 +325,6 @@ class Chapter:
             if self._technical_eval is not None:
                 return self._technical_eval
 
-        self.evalTechnical()
         return self._technical_eval
 
     @technical_eval.setter
@@ -349,18 +352,22 @@ class Chapter:
         Evaluate the current chapter for entertainment value and estimate a score from 0 - 100. Return only negative feedback, and exclude positive feedback. 
         The format of the result is JSON with the following structure: {{ "score": int, "comments": [str] }}
         """})
-        evalStr = self.llm.entEval(conversation)
-        if evalStr is None:
-            self._entertainment_eval = None
-            return None
-        
-        evalStr = evalStr[8:-3]
-        print(json.dumps(evalStr))
-        self.storage.saveChapterEntertainmentEval(self.number, evalStr)
 
-        print("Loading eval")
-        print(evalStr)
-        self._entertainment_eval = ChapterEval(json.loads(evalStr))
+        try:
+            evalStr = self.llm.entEval(conversation)
+            if evalStr is None:
+                self._entertainment_eval = None
+                return None
+            
+            evalStr = evalStr[8:-3]
+            print(json.dumps(evalStr))
+            self.storage.saveChapterEntertainmentEval(self.number, evalStr)
+
+            print("Loading eval")
+            print(evalStr)
+            self._entertainment_eval = ChapterEval(json.loads(evalStr))
+        except:
+            return None
         return self._entertainment_eval
     
     @property
@@ -377,7 +384,6 @@ class Chapter:
             if self._entertainment_eval is not None:
                 return self._entertainment_eval
 
-        self.evalEntertainment()
         return self._entertainment_eval
     
     @entertainment_eval.setter

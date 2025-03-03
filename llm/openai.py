@@ -6,11 +6,12 @@ class OpenAiLLM:
         api_key = config.get('api_key', '')
         self.client = OpenAI(api_key=api_key)
         self.default_temp = config.get('default_temp', 0.7)
+        self.model = config.get('model', 'gpt-4o')
 
         if api_key == '':
             self.max_tokens = 0
         else:
-            self.max_tokens = 4096
+            self.max_tokens = 30000
 
     def conversation(self, conversation: [dict], temperature: float = None):
         if temperature is None:
@@ -31,10 +32,9 @@ class OpenAiLLM:
         
         # Call OpenAI
         response = self.client.chat.completions.create(
-            model="gpt-4o",
+            model=self.model,
             messages=messages,
             temperature=temperature,
-            max_tokens=self.max_tokens,
             n=1,
             stop=None,
         )
@@ -48,9 +48,8 @@ class OpenAiLLM:
             {"role": "user", "content": prompt}
         ]
         response = self.client.chat.completions.create(
-            model="gpt-4o",
+            model=self.model,
             messages=messages,
-            max_tokens=self.max_tokens,
             n=1,
             stop=None,
             temperature=self.default_temp,

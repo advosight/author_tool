@@ -56,9 +56,26 @@ class Book:
                 if str(chapter) == title:
                     return chapter
 
-    def addChapter(self):
-        """ Adds a new chapter to the end of the book """
-        chapter = Chapter(self, len(self._chapters) + 1, self.storage)
+    def addChapter(self, afterChapter: int = None):
+        """ Adds a new chapter to the book 
+        
+        Args:
+            afterChapter (int): The chapter to insert after
+        """
+
+        if afterChapter is None:
+            chapter = Chapter(self, len(self._chapters) + 1, self.storage)
+            chapter.content = ""
+            self._chapters.append(chapter)
+            self._chapters.sort(key=lambda x: x.number)
+            return chapter
+
+        # In reverse order increase the number of all chapters after the afterChapter
+        for i in range(len(self._chapters) - 1, afterChapter - 1, -1):
+            self.storage.moveChapterNumber(self._chapters[i].number, self._chapters[i].number + 1)
+            self._chapters[i].number += 1
+
+        chapter = Chapter(self, afterChapter + 1, self.storage)
         chapter.content = ""
         self._chapters.append(chapter)
         self._chapters.sort(key=lambda x: x.number)
