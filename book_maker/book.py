@@ -9,7 +9,7 @@ class Book:
     def __init__(self, title: str):
         self.title = title
         self.storage = Storage(title)
-        self._chapters = None
+        self._chapters: list[Chapter] = None
         self._characters = None
         self._writing_style = None
         self.llm = getLLM()
@@ -80,6 +80,17 @@ class Book:
         self._chapters.append(chapter)
         self._chapters.sort(key=lambda x: x.number)
         return chapter
+
+    def removeChapter(self, chapter: Chapter):
+        """Removes a chapter from the book
+
+        Args:
+            chapter (Chapter): The chapter to remove
+        """
+        self.storage.deleteChapter(chapter.number)
+        self._chapters.remove(chapter)
+        for i in range(chapter.number - 1, len(self._chapters)):
+            self._chapters[i].number -= 1
 
     def loadFromContent(self, storyFile: any):
         story = mammoth.convert_to_markdown(storyFile).value

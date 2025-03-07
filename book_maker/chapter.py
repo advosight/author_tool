@@ -20,7 +20,7 @@ class Chapter:
         self.llm = getLLM()
         self.storage = storage
         self.book = book
-        self.number = number
+        self._number = number
         self._characters = None
         self._content = None
         self._edit_mode = 'full'
@@ -76,6 +76,20 @@ class Chapter:
 
     def __repr__(self):
         return f"# {self}\n{self.content}\n"
+
+    @property
+    def number(self):
+        return self._number
+    
+    @number.setter
+    def number(self, number: int):
+        if number == self._number:
+            logger.info(f"Chapter number is already {number}")
+            return
+        
+        logger.info(f"Changing chapter from {self._number} to {number}")
+        self.storage.moveChapterNumber(self._number, number)
+        self._number = number
 
     @property
     def content(self):

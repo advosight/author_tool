@@ -3,6 +3,9 @@ from PIL import Image
 from io import BytesIO
 import shutil
 import json
+import logging as lg
+
+logger = lg.getLogger(__name__)
 
 def createDirIfNeeded(path: str):
     if not os.path.exists(path):
@@ -594,5 +597,16 @@ class Storage:
         chapter_root = f"{self.root}/chapters/{chapter}"
         new_root = f"{self.root}/chapters/{new_number}"
 
+        logger.info(f"Moving chapter {chapter} to {new_number}")
         # Move directory from chapter_root to new_root
         shutil.move(chapter_root, new_root)
+
+    def deleteChapter(self, chapter: int):
+        """Deletes the chapter
+        Args:
+            chapter (int): The chapter number
+        """
+        chapter_root = f"{self.root}/chapters/{chapter}"
+        logger.info(f"Deleting chapter {chapter}")
+        # Delete directory and all contents
+        shutil.rmtree(chapter_root)

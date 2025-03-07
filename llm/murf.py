@@ -15,7 +15,10 @@ class Murf:
             self.max_tokens = int(config.get('max_tokens', '10370'))
 
     def getSpeech(self, paragraph: str) -> bytes:
-        print(f"{paragraph}")
+        if paragraph.strip() == "":
+            return None
+        
+        print(f"Speech: {paragraph}")
 
         payload = json.dumps({
             "voiceId": "en-UK-juliet",
@@ -43,6 +46,7 @@ class Murf:
 
         result = response.json()
 
+        print(f"Speech Result: {result}")
         audioResponse = requests.request("GET", result["audioFile"])
 
         retval = audioResponse.content

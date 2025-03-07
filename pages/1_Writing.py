@@ -1,8 +1,8 @@
 import streamlit as st
-from views.book_list import book_list
-from views.view import viewChapter
-from views.content_edit import contentEditor, segmentEditor
-from views.characters import listCharacters, viewChapterCharacters
+from pages.views.book_list import book_list
+from pages.views.view import viewChapter
+from pages.views.content_edit import contentEditor, segmentEditor
+from pages.views.characters import listCharacters, viewChapterCharacters
 from streamlit_navigation_bar import st_navbar
 
 with st.sidebar:

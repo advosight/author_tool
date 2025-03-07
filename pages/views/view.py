@@ -1,6 +1,6 @@
 import streamlit as st
-from views.characters import listCharacters
-from views.content_edit import contentEditor, segmentEditor
+from pages.views.characters import listCharacters
+from pages.views.content_edit import contentEditor, segmentEditor
 from book_maker import Chapter
 from llm import getLLM
 
@@ -49,7 +49,7 @@ def viewChapter(chapter: Chapter):
         
         if st.session_state.audio is not None:
             st.divider()
-            # st.audio(st.session_state.audio, format="audio/mp3")
+            st.audio(st.session_state.audio, format="audio/mp3")
             if st.button("Reset audio player"):
                 st.session_state.audio = None
                 st.rerun()

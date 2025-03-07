@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 from book_maker import Chapter, Book
-from views.book_list import book_list
+from pages.views.book_list import book_list
 
 book = None
 with st.sidebar:
