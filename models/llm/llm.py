@@ -1,7 +1,4 @@
-from .api import ApiLLM
-from .bedrock import BedrockLLM
-from .openai import OpenAiLLM
-from .murf import Murf
+from models.plugin_framework import get_plugin_definitions, load_plugin_class
 from logging import getLogger
 from utils import Storage
 
@@ -29,6 +26,8 @@ class LLM:
         self.tech_eval = EmptyLLM()
         self.ent_eval = EmptyLLM()
         self.voice = EmptyLLM()
+
+        self.plugins = get_plugin_definitions('llm')
 
         storage = Storage(None)
         settings = storage.getSettings()
@@ -80,15 +79,13 @@ class LLM:
                 continue
 
             api = EmptyLLM()
-            if type == 'API':
-                api = ApiLLM(config)
-            if type == 'AWS Bedrock':
-                api = BedrockLLM(config)
-            if type == 'OpenAI':
-                api = OpenAiLLM(config)
-            if type == 'Murf':
-                api = Murf(config)
-            
+
+            for plugin in self.plugins:
+                if plugin['name'] == type:
+                    pluginClass = load_plugin_class(plugin)
+                    api = pluginClass(config)
+                    break
+
             logger.info(f"Loaded configuration {type} for roles {role}")
             if 'image' == role:
                 self.image_api = api

@@ -1,5 +1,5 @@
 import streamlit as st
-from book_maker import Chapter, Book
+from models.book_maker import Chapter, Book
 import pandas as pd
 
 def listCharacters(chapter: Chapter):

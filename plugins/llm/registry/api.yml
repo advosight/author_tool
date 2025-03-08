@@ -1,0 +1,11 @@
+name: API
+
+features:
+  - content
+  - image
+  - tech_eval
+  - ent_eval
+  - voice
+
+module: plugins.llm.components.api
+class: ApiLLM

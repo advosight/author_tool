@@ -1,0 +1,10 @@
+name: AWS Bedrock
+
+features:
+  - content
+  - image
+  - tech_eval
+  - ent_eval
+
+module: plugins.llm.components.bedrock
+class: BedrockLLM

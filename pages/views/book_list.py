@@ -1,10 +1,8 @@
 import streamlit as st
-import logging as lg
-from book_maker import BookLibrary
+import utils.logging as lg
+from models.book_maker import BookLibrary
 
-logger = lg.getLogger(__name__)
-logger.addHandler(lg.StreamHandler())
-logger.setLevel('DEBUG')
+logger = lg.getLogger(__name__, 'DEBUG')
 
 def book_list():
     if 'selected_book' not in st.session_state:

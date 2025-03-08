@@ -1,5 +1,6 @@
 import openai as openai
-from logging import getLogger
+from utils.logging import getLogger
+import streamlit as st
 
 class ApiLLM:
     def __init__(self, config):
@@ -17,6 +18,33 @@ class ApiLLM:
         )
         self.client.with_options()
         self.max_tokens = int(config.get('max_tokens', '10370'))
+
+    def display_config(self, feature: str, setting: dict, saveSettings: any):
+        # Get API Information
+        def on_change():
+            setting['url'] = st.session_state[f"{feature}_url"]
+            saveSettings()
+        st.text_input(f"{feature} Url", value=setting.get('url', 'http://localhost:1234/v1'), key=f"{feature}_url", on_change=on_change)
+
+        # Get API Key
+        def on_change_key():
+            setting['api_key'] = st.session_state[f"{feature}_api_key"]
+            saveSettings()
+        st.text_input(f"{feature} API Key", value=setting.get('api_key', ''), key=f"{feature}_api_key", on_change=on_change_key)
+
+        # Get Model Name
+        def on_change_model():
+            setting['model'] = st.session_state[f"{feature}_model"]
+            saveSettings()
+        st.text_input(f"{feature} Model", value=setting.get('model', ''), key=f"{feature}_model", on_change=on_change_model)
+
+        def on_change_max_tokens():
+            setting['max_tokens'] = st.session_state[f"{feature}_max_tokens"]
+            saveSettings()
+        st.text_input(f"{feature} Max Tokens", value=setting.get('max_tokens', '10370'), key=f"{feature}_max_tokens", on_change=on_change_max_tokens)
+
+    def getAIFunctions():
+        return ['Entertainment', "Technical", "Entertainment", "Speech"]
 
     def prompt(self, prompt):
         # Prompt the LLM with the given prompt

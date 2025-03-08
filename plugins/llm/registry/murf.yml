@@ -1,0 +1,7 @@
+name: Murf
+
+features:
+  - voice
+
+module: plugins.llm.components.murf
+class: Murf

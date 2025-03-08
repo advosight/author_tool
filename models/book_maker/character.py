@@ -1,5 +1,5 @@
 from utils import Storage, getLogger
-from llm import getLLM
+from models.llm import getLLM
 import base64
 
 logger = getLogger('Character', 'DEBUG')

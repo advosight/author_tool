@@ -1,6 +1,6 @@
 import streamlit as st
-from book_maker import Book, Chapter
-from llm import getLLM
+from models.book_maker import Book, Chapter
+from models.llm import getLLM
 from streamlit_quill import st_quill
 
 def segmentEditor(original_text: str, chapter: Chapter):

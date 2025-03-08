@@ -4,7 +4,7 @@ import pygame
 from io import BytesIO
 from utils import Storage, getLogger
 from .character import Character
-from llm import getLLM
+from models.llm import getLLM
 
 logger = getLogger('Chapter')
 

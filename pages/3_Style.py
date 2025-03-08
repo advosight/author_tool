@@ -1,8 +1,20 @@
 import streamlit as st
+from pages.views.book_list import book_list
+
+book = None
+with st.sidebar:
+    if 'book' not in st.session_state or st.session_state.book is None:
+        book_list()
+        st.stop()
+
+    book = st.session_state.book
+    st.write(f"# {book.title}")
+
+if 'book' not in st.session_state:
+    st.write("No book loaded")
+    st.stop()
 
 mode = st.selectbox("Mode", ["View", "Edit"])
-
-book = st.session_state.book
 
 if book is None:
     st.write("No book selected")

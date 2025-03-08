@@ -1,8 +1,8 @@
 import streamlit as st
-from llm import getLLM
+from models.llm import getLLM
 from pages.views.book_list import book_list
 from utils import getLogger
-from book_maker import Book, Chapter
+from models.book_maker import Book, Chapter
 
 logger = getLogger('Author Tool')
 

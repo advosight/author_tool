@@ -1,8 +1,8 @@
 import streamlit as st
 from pages.views.characters import listCharacters
 from pages.views.content_edit import contentEditor, segmentEditor
-from book_maker import Chapter
-from llm import getLLM
+from models.book_maker import Chapter
+from models.llm import getLLM
 
 def viewChapter(chapter: Chapter):
 

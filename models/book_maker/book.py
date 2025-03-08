@@ -1,9 +1,9 @@
-from book_maker.chapter import Chapter
-from book_maker.character import Character
+from models.book_maker.chapter import Chapter
+from models.book_maker.character import Character
 from utils import Storage
 import mammoth
 from io import StringIO
-from llm import getLLM
+from models.llm import getLLM
 
 class Book:
     def __init__(self, title: str):

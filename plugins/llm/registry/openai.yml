@@ -1,0 +1,10 @@
+name: OpenAI
+
+features:
+  - content
+  - image
+  - tech_eval
+  - ent_eval
+
+module: plugins.llm.components.openai
+class: OpenAiLLM
