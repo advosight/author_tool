@@ -3,6 +3,18 @@
 ## Description
 A tool designed to assist authors in their writing process by leveraging LLMs and Generative AI to simplify the writing process.
 
+![Author Tool](docs/images/view_view.png)
+
+With this tool, authors can leverage Generative AI to help them write.
+![AI Edit](docs/images/view_ai_edit.png)
+
+When they are done they can replace the original section in the story with the updates.
+
+The AI also is used to give feedback on the entertainment value and the technical accuracy of the story based on the character's knowledge in the chapter.
+|||
+|:--:|:--:|
+|![Entertainment Feedback](docs/images/view_ent_feedback.png)|![Technical Feedback](docs/images/view_tech_feedback.png)|
+
 ## Features
 - LLM Supported Writing
 - Technical accuracy evaluation of content in chapters based on character's expertise
