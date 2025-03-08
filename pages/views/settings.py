@@ -26,7 +26,14 @@ def AIConfig(key: str, default_temp: float, settings: dict):
                 setting_index = -1
             break
     
-    if setting_index == -1:
+    if setting == None:
+        # Save default settings if not present
+        setting = {'type': ai_providers[0], 'role': key}
+        settings['gen_ai'].append(setting)
+        saveSettings(settings)
+        setting_index = 0
+    elif setting_index == -1:
+        # The AI specified is not in the list
         setting_index = 0
         setting['type'] = ai_providers[setting_index]
         saveSettings(settings)

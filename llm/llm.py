@@ -62,9 +62,6 @@ class LLM:
         
         if configs is None:
             configs = storage.getSettings()
-            if configs is None:
-                logger.error("No configurations found")
-                return
             
         for config in configs['gen_ai']:
             type = config.get('type', None)

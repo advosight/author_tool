@@ -1,7 +1,6 @@
 import streamlit as st
 from llm import getLLM
 from pages.views.book_list import book_list
-from pages.views.settings import settingsView
 from utils import getLogger
 from book_maker import Book, Chapter
 
@@ -16,7 +15,7 @@ llm.loadConfigurations()
 
 if not llm.is_configured:
     logger.info("LLM is not configured")
-    settingsView()
+    st.switch_page("pages/4_Settings.py")
     st.stop()
 
 

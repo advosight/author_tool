@@ -571,7 +571,7 @@ class Storage:
             The settings for the book
         """
         if not os.path.exists(f"{self.libraryRoot}/settings.json"):
-            return {}
+            return { "gen_ai": [] }
 
         with open(f"{self.libraryRoot}/settings.json", "r") as f:
             content = f.read()

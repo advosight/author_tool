@@ -69,17 +69,19 @@ def viewChapter(chapter: Chapter):
                 help_text += f"- {feedback}\n"
             st.select_slider("Entertainment", value=chapter.entertainment_eval.score, options=range(0, 100), help=help_text)
 
+            if st.button("Refresh Entertainment Feedback", type="tertiary"):
+                chapter.evalEntertainment()
+                st.rerun()
+
     with col2:
         if chapter.technical_eval is not None:
             help_text = ""
             for feedback in chapter.technical_eval.comments:
                 help_text += f"- {feedback}\n"
             st.select_slider("Technical", value=chapter.technical_eval.score, options=range(0, 100), help=help_text)
-    
-    if st.button("Refresh Scores"):
-        chapter.evalEntertainment()
-        chapter.evalTechnical()
-        st.rerun()
+        if st.button("Refresh Technical Feedback", type="tertiary"):
+            chapter.evalTechnical()
+            st.rerun()
 
     listCharacters(chapter)
 
