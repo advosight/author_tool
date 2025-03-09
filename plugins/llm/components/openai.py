@@ -12,6 +12,8 @@ class OpenAiLLM:
         self.client = OpenAI(api_key=api_key)
         self.default_temp = config.get('default_temp', 0.7)
         self.model = config.get('model', 'gpt-4o')
+        self.voice = config.get('voice', 'alloy')
+        self.voice_model = config.get('voice_model', 'tts-1')
 
         if api_key == '':
             self.max_tokens = 0
@@ -42,6 +44,23 @@ class OpenAiLLM:
             A temperature of 1.0 means the AI will always choose the most creative option.
             A temperature of 0.7 is a good balance between creativity and precision.
             """)
+        
+        if feature == 'voice':
+            def on_voice_change():
+                setting['voice'] = st.session_state[f"{feature}_voice"]
+                saveSettings()
+
+            st.selectbox("Voice", ['alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'sage', 'shimmer'], key=f"{feature}_voice", help="""
+                The voice to use for the AI.
+                """, on_change=on_voice_change)
+            
+            def on_model_changed():
+                setting['voice_model'] = st.session_state[f"{feature}_voice_model"]
+                saveSettings()
+
+            st.selectbox("Audio Model", ['tts-1', 'tts-1-hd'], key=f"{feature}_voice_model", help="""
+                The audio model to use for the AI.
+                """, on_change=on_model_changed)
 
     def getAIFunctions():
         return ['Entertainment', "Technical", "Entertainment"]
@@ -88,3 +107,11 @@ class OpenAiLLM:
             temperature=self.default_temp,
         )
         return response.choices[0].message.content.strip()
+    
+    def getSpeech(self, paragraph: str) -> bytes:
+        response = self.client.audio.speech.create(
+            model=self.voice_model,
+            voice=self.voice,
+            input=paragraph
+        )
+        return response.content
