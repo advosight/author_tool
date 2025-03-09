@@ -1,19 +1,24 @@
 import requests
 import json
 import streamlit as st
+from elevenlabs.client import ElevenLabs
+from utils import getLogger
 
-murf_url = "https://api.murf.ai/v1/speech/generate"
-class ElevenLabs:
+logger = getLogger('ElevenLabs')
+
+class ElevenLabsClient:
     def __init__(self, config: dict):
-        self.name = "Murf"
+        self.name = "ElevenLabs"
         self.api_key = config.get('api_key', None)
-        self.local = config.get('local', 'en-US')
-        self.model_version = config.get('model_version', 'GEN2')
+        self.voice = config.get('voice', 'Alice')
+        self.voice_id = config.get('voice_id', None)
+        self.client: ElevenLabs = None
 
         if self.api_key is None:
             self.max_tokens = 0
         else:
-            self.max_tokens = int(config.get('max_tokens', '10370'))
+            self.client = ElevenLabs(api_key=self.api_key)
+            self.max_tokens = 10000
 
     def display_config(self, feature: str, setting: dict, saveSettings: any):
         st.write("## ElevenLabs Configurations")
@@ -24,11 +29,21 @@ class ElevenLabs:
             saveSettings()
         st.text_input(f"{feature} API Key", value=setting.get('api_key', ''), key=f"{feature}_api_key", on_change=on_change_key)
 
+        voicesResponse  = requests.get("https://api.elevenlabs.io/v1/voices")
+        # Get the body of the response
+        voices = voicesResponse.json()['voices']
+
+        name_list = [voice['name'] for voice in voices]
+
         # Settings for voice
         def on_change():
-            setting['voice'] = st.session_state[f"{feature}_voice"]
+            voice_name = st.session_state[f"{feature}_voice"]
+            setting['voice'] = voice_name
+            setting['voice_id'] = voices[name_list.index(voice_name)]['voice_id']
             saveSettings()
-        st.text_input(f"{feature} Voice", value=setting.get('voice', ''), key=f"{feature}_voice", on_change=on_change)
+        
+        st.selectbox(f"{feature} Voice", name_list, key=f"{feature}_voice", index=name_list.index(setting.get('voice', 'Alice')), on_change=on_change)
+        # st.text_input(f"{feature} Voice", value=setting.get('voice', ''), key=f"{feature}_voice", on_change=on_change)
 
     def getAIFunctions():
         return ['Speech']
@@ -37,38 +52,18 @@ class ElevenLabs:
         if paragraph.strip() == "":
             return None
         
-        print(f"Speech: {paragraph}")
+        logger.info(f"Speech: {paragraph}")
 
-        payload = json.dumps({
-            "voiceId": "en-UK-juliet",
-            "style": "Conversational",
-            "text": paragraph,
-            "rate": 0,
-            "pitch": 0,
-            "sampleRate": 48000,
-            "format": "MP3",
-            "channelType": "MONO",
-            "pronunciationDictionary": {},
-            "encodeAsBase64": False,
-            "variation": 1,
-            "audioDuration": 0,
-            "modelVersion": self.model_version,
-            "multiNativeLocale": self.local
-        })
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'api-key': self.api_key
-        }
+        audio_stream = self.client.text_to_speech.convert_as_stream(
+            text=paragraph,
+            voice_id=self.voice_id,
+            output_format="mp3_44100_128",
+            model_id="eleven_multilingual_v2"
+        )
 
-        response = requests.request("POST", murf_url, headers=headers, data=payload)
+        retval: bytes = b''
+        for chunk in audio_stream:
+            if isinstance(chunk, bytes):
+                retval += chunk
 
-        result = response.json()
-
-        print(f"Speech Result: {result}")
-        audioResponse = requests.request("GET", result["audioFile"])
-
-        retval = audioResponse.content
-
-        # print(f"Speech Result: {retval}")
         return retval

@@ -4,4 +4,4 @@ features:
   - voice
 
 module: plugins.llm.components.elevenlabs
-class: ElevenLabs
+class: ElevenLabsClient
